@@ -40,6 +40,11 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>${open.api.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
