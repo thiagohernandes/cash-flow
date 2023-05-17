@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-cash-flow
+  labels:
+    app: api-cash-flow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-cash-flow
+  template:
+    metadata:
+      labels:
+        app: api-cash-flow
+    spec:
+      containers:
+        - name: api-cash-flow
+          image: kalatunga/api-cash-flow:1
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8088
+          env:
+            - name: MONGO_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mongodb
+                  key: database-name
+            - name: MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: database-user
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: database-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-cash-flow
+  labels:
+    app: api-cash-flow
+spec:
+  ports:
+    - port: 8088
+      protocol: TCP
+      nodePort: 31000
+  selector:
+    app: api-cash-flow
+  type: NodePort
