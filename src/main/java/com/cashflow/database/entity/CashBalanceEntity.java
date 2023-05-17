@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @Data
-@Document(collection = "clc_cash_balance")
+@Document(collection = "collection_cash_balance")
 public class CashBalanceEntity {
 
     @Id

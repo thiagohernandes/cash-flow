@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Data
-@Document(collection = "clc_cash_flow")
+@Document(collection = "collection_cash_flow")
 public class CashFlowEntity {
 
     @Id

@@ -1,14 +1,14 @@
 version: '3.6'
 services:
-#  api-cash-flow:
-#    image: api-cash-flow:1
-#    restart: on-failure
-#    ports:
-#      - 8088:8088
-#    depends_on:
-#      - mongodb
-#    networks:
-#      - internal-net
+  api-cash-flow:
+    image: api-cash-flow:1
+    restart: on-failure
+    ports:
+      - 8088:8088
+    depends_on:
+      - mongodb
+    networks:
+      - internal-net
   mongodb:
     container_name: mongodb
     image: mongo:4.4.6
@@ -20,9 +20,11 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=app_user
       - MONGO_INITDB_ROOT_PASSWORD=app_password
       - MONGO_INITDB_DATABASE=db_cash_flow
+    networks:
+      - internal-net
 volumes:
   mongo:
 
-#networks:
-#  internal-net:
-#    driver: bridge
+networks:
+  internal-net:
+    driver: bridge

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface CashFlowRepository extends MongoRepository<CashFlowEntity, String> {
 
-    @Query("{'date' : { $gte: ?0, $lte: ?1 }, 'type' : ?2 }")
+    @Query("{$and: [{'date' : { $gte: ?0 } }, {'date' : {$lte: ?1 } }], 'type' : ?2 }")
     List<CashFlowEntity> searchDatesType(LocalDate initialDate,
                                          LocalDate finalDate,
                                          String cashFlowType);

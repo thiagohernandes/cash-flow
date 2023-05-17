@@ -65,14 +65,14 @@ public class CashFlowService {
         final var balance = Optional.ofNullable(cashBalanceService.verifyBalance());
 
         final var inputDailyCondensed = cashFlowRepository
-            .searchDatesType(initialDate.minusDays(1), finalDate, CashFlowType.CREDIT.name())
+            .searchDatesType(initialDate, finalDate, CashFlowType.CREDIT.name())
             .stream()
             .map(item -> Objects.isNull(item.getValue()) ? new BigDecimal("0.0")
                 : item.getValue())
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         final var outputDailyCondensed = cashFlowRepository
-            .searchDatesType(initialDate.minusDays(1), finalDate, CashFlowType.DEBIT.name())
+            .searchDatesType(initialDate, finalDate, CashFlowType.DEBIT.name())
             .stream()
             .map(item -> Objects.isNull(item.getValue()) ? new BigDecimal("0.0")
                 : item.getValue())
