@@ -1,6 +1,5 @@
 package com.cashflow.service;
 
-import com.cashflow.database.repository.CashBalanceRepository;
 import com.cashflow.database.repository.CashFlowRepository;
 import com.cashflow.domain.request.CashFlowRequest;
 import com.cashflow.domain.response.CashFlowDailyCondensedResponse;
@@ -14,6 +13,8 @@ import com.cashflow.validator.CashFlowValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,9 +30,9 @@ public class CashFlowService {
     private final CashFlowValidator cashFlowValidator;
     private final CashFlowFactory cashFlowFactory;
     private final CashFlowRepository cashFlowRepository;
-    private final CashBalanceRepository cashBalanceRepository;
     private final CashBalanceService cashBalanceService;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public CashFlowResponse save(final CashFlowRequest cashFlowRequest)
         throws HandlerValidationException {
         var input = new BigDecimal("0.0");
@@ -64,14 +65,14 @@ public class CashFlowService {
         final var balance = Optional.ofNullable(cashBalanceService.verifyBalance());
 
         final var inputDailyCondensed = cashFlowRepository
-            .searchDatesType(initialDate.minusDays(1), finalDate, CashFlowType.INPUT.name())
+            .searchDatesType(initialDate.minusDays(1), finalDate, CashFlowType.CREDIT.name())
             .stream()
             .map(item -> Objects.isNull(item.getValue()) ? new BigDecimal("0.0")
                 : item.getValue())
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         final var outputDailyCondensed = cashFlowRepository
-            .searchDatesType(initialDate.minusDays(1), finalDate, CashFlowType.OUTPUT.name())
+            .searchDatesType(initialDate.minusDays(1), finalDate, CashFlowType.DEBIT.name())
             .stream()
             .map(item -> Objects.isNull(item.getValue()) ? new BigDecimal("0.0")
                 : item.getValue())
@@ -108,7 +109,7 @@ public class CashFlowService {
     private void handleTypeCashFlow(final CashFlowRequest cashFlowRequest,
                                     final BigDecimal input,
                                     final BigDecimal output) {
-        if (cashFlowRequest.getType().equals(CashFlowType.INPUT.name())) {
+        if (cashFlowRequest.getType().equals(CashFlowType.CREDIT.name())) {
             cashBalanceService.updateBalance(cashFlowRequest.getValue(), output);
         } else {
             cashBalanceService.updateBalance(input, cashFlowRequest.getValue());
