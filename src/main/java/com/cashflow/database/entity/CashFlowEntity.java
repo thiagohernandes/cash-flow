@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ public class CashFlowEntity {
 
     @Id
     private String id;
+    @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDate date;
     private String type;
     private BigDecimal value;

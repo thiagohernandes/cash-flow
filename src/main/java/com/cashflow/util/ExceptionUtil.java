@@ -3,9 +3,9 @@ package com.cashflow.util;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidatorUtil {
+public class ExceptionUtil {
 
-    public void validate(final String msg) {
+    public void message(final String msg) {
         throw new RuntimeException(msg);
     }
 }
