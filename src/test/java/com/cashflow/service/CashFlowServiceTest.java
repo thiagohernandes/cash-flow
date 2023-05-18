@@ -10,8 +10,10 @@ import com.cashflow.exception.handler.HandlerValidationException;
 import com.cashflow.factory.CashFlowFactory;
 import com.cashflow.support.SupportTests;
 import com.cashflow.type.CashFlowType;
+import com.cashflow.util.ExceptionUtil;
 import com.cashflow.util.FormatUtil;
 import com.cashflow.validator.CashFlowValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +39,8 @@ public class CashFlowServiceTest extends SupportTests {
     private final LocalDate initialDate = LocalDate.now();
     private final LocalDate finalDate = LocalDate.now().plusDays(3);
     @Mock
+    private ExceptionUtil exceptionUtil;
+    @Mock
     private FormatUtil formatUtil;
     @Mock
     private CashFlowValidator cashFlowValidator;
@@ -48,6 +52,12 @@ public class CashFlowServiceTest extends SupportTests {
     private CashBalanceService cashBalanceService;
     @InjectMocks
     private CashFlowService cashFlowService;
+
+    @BeforeEach
+    void init() {
+        cashFlowEntityCredit.setValue(new BigDecimal("500"));
+        cashFlowEntityDebit.setValue(new BigDecimal("100"));
+    }
 
     @Test
     void shouldSaveFlowRequestTest() throws HandlerValidationException {
@@ -67,9 +77,6 @@ public class CashFlowServiceTest extends SupportTests {
 
     @Test
     void shouldGetDailyCondensedWithBalancePresentTest() {
-        cashFlowEntityCredit.setValue(new BigDecimal("500"));
-        cashFlowEntityDebit.setValue(new BigDecimal("100"));
-
         when(cashBalanceService.verifyBalance())
             .thenReturn(cashBalanceEntity);
 
@@ -89,9 +96,6 @@ public class CashFlowServiceTest extends SupportTests {
 
     @Test
     void shouldGetDailyCondensedWithoutBalancePresentTest() {
-        cashFlowEntityCredit.setValue(new BigDecimal("500"));
-        cashFlowEntityDebit.setValue(new BigDecimal("100"));
-
         when(cashFlowRepository
             .searchDatesType(initialDate, finalDate, CashFlowType.CREDIT.name()))
             .thenReturn(Collections.singletonList(cashFlowEntityCredit));
@@ -104,6 +108,20 @@ public class CashFlowServiceTest extends SupportTests {
             cashFlowService.dailyCondensed(initialDate, finalDate);
 
         assertNotNull(dailyCondensed);
+    }
+
+    @Test
+    void shouldExceptionOnGetDailyCondensedWithoutBalancePresentTest() {
+        when(cashFlowRepository
+            .searchDatesType(initialDate, finalDate, CashFlowType.CREDIT.name()))
+            .thenReturn(Collections.singletonList(cashFlowEntityCredit));
+
+        when(cashFlowRepository
+            .searchDatesType(initialDate, finalDate, CashFlowType.DEBIT.name()))
+            .thenReturn(Collections.singletonList(cashFlowEntityDebit));
+
+        assertThrows(RuntimeException.class, () -> cashFlowService
+            .dailyCondensed(initialDate.plusDays(4), finalDate));
     }
 
 }

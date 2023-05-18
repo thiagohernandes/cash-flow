@@ -8,6 +8,7 @@ import com.cashflow.exception.handler.HandlerValidationException;
 import com.cashflow.factory.CashFlowFactory;
 import com.cashflow.type.CashFlowType;
 import com.cashflow.type.DatetimePatternType;
+import com.cashflow.util.ExceptionUtil;
 import com.cashflow.util.FormatUtil;
 import com.cashflow.validator.CashFlowValidator;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @Slf4j
 public class CashFlowService {
 
+    private final ExceptionUtil exceptionUtil;
     private final FormatUtil formatUtil;
     private final CashFlowValidator cashFlowValidator;
     private final CashFlowFactory cashFlowFactory;
@@ -62,6 +64,7 @@ public class CashFlowService {
 
     public CashFlowDailyCondensedResponse dailyCondensed(final LocalDate initialDate,
                                                          final LocalDate finalDate) {
+        handleDates(initialDate, finalDate);
         final var balance = Optional.ofNullable(cashBalanceService.verifyBalance());
 
         final var inputDailyCondensed = cashFlowRepository
@@ -113,6 +116,12 @@ public class CashFlowService {
             cashBalanceService.updateBalance(cashFlowRequest.getValue(), output);
         } else {
             cashBalanceService.updateBalance(input, cashFlowRequest.getValue());
+        }
+    }
+
+    private void handleDates(final LocalDate initialDate, final LocalDate finalDate) {
+        if (initialDate.isAfter(finalDate)) {
+            exceptionUtil.message("A data inicial não pode ser maior que a final!");
         }
     }
 }
