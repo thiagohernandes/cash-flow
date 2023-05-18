@@ -30,8 +30,8 @@ public class CashFlowValidator {
         if (Objects.isNull(cashFlowRequest.getType())) {
             exceptionUtil.message("O tipo de lançamento não pode ser nulo!");
         }
-        if (cashFlowRequest.getType().toUpperCase() != CashFlowType.DEBIT.name()
-            && cashFlowRequest.getType().toUpperCase() != CashFlowType.CREDIT.name()) {
+        if (!cashFlowRequest.getType().toUpperCase().equals(CashFlowType.DEBIT.name())
+            && !cashFlowRequest.getType().toUpperCase().equals(CashFlowType.CREDIT.name())) {
             exceptionUtil.message("O tipo de lançamento deve ser CREDIT ou DEBIT");
         }
     }
