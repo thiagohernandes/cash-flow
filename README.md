@@ -8,7 +8,7 @@ Merchant's Cash Flow
 
 Before install:
 
-`Java: https://docs.oracle.com/en/java/javase/17/install/installation-jdk-microsoft-windows-platforms.html`
+`Java (JDK 17): https://docs.oracle.com/en/java/javase/17/install/installation-jdk-microsoft-windows-platforms.html`
 
 `Docker: https://docs.docker.com/`
 
@@ -33,6 +33,8 @@ Running local:
 `http://localhost:8088/swagger-ui/index.html`
 
 ### Calls
+
+Postman: see postman's folder in project root (import and change IP Kubernetes's calls)
 
 Return of entries and exits in the period and updated balance
 
@@ -83,4 +85,10 @@ After last command, do:
 `http://<ip-generated-local>:31000/cash-flow/daily-condensed/{initialDate}/{finalDate}`
 
 `http://<ip-generated-local>:31000/cash-flow/save`
+
+### Kubernetes Cluster
+
+HPA (Horizontal Pod Autoscaling)
+
+`The HPA was used with the execution of two instances aiming at performance and anticipating problems with availability and performance.`
 

@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "0c11af67-0607-48b8-a54f-6c0d09468789",
+		"name": "cash-flow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2950189"
+	},
+	"item": [
+		{
+			"name": "GET daily condensed KUBERNETES",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.49.2:31000/cash-flow/daily-condensed/2023-05-15/2023-05-17",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"49",
+						"2"
+					],
+					"port": "31000",
+					"path": [
+						"cash-flow",
+						"daily-condensed",
+						"2023-05-15",
+						"2023-05-17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Save KUBERNETES",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"date\": \"2023-05-15\",\n    \"type\": \"DEBIT\",\n    \"value\": 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://192.168.49.2:31000/cash-flow/save",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"49",
+						"2"
+					],
+					"port": "31000",
+					"path": [
+						"cash-flow",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET daily condensed LOCAL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"date\": \"2023-05-16\",\n    \"type\": \"OUTPUT\",\n    \"value\": 40\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/cash-flow/daily-condensed/2023-05-15/2023-05-15",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"cash-flow",
+						"daily-condensed",
+						"2023-05-15",
+						"2023-05-15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Save LOCAL",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"date\": \"2023-05-16\",\n    \"type\": \"DEBIT\",\n    \"value\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/cash-flow/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"cash-flow",
+						"save"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
