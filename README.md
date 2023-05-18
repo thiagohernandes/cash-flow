@@ -56,7 +56,11 @@ Body
 "value": 30
 }`
 
-### Deploy Kubernetes
+### Deploy Kubernetes (prod branch)
+
+PS: before `mvn clean install`, if started docker compose, remove the MongoDB's container to avoid ports conflit 
+
+Do: `docker ps` and `docker rm -f <first letters container mongodb>`
 
 Init Kubernetes Tool
 
