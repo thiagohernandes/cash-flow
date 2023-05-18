@@ -64,6 +64,7 @@ public class CashFlowService {
 
     public CashFlowDailyCondensedResponse dailyCondensed(final LocalDate initialDate,
                                                          final LocalDate finalDate) {
+        handleDates(initialDate, finalDate);
         final var balance = Optional.ofNullable(cashBalanceService.verifyBalance());
 
         final var inputDailyCondensed = cashFlowRepository
