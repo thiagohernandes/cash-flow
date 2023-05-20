@@ -58,6 +58,14 @@ public class CashFlowControllerTest extends SupportTests {
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated());
+    }
 
+    @Test
+    void shouldGetFinancialReleasesTest() throws Exception {
+        mockMvc.perform(get("/cash-flow/financial-releases")
+                .param("initialDate", "2023-05-18")
+                .param("finalDate", "2023-05-19"))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 }

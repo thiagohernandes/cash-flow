@@ -1,6 +1,8 @@
 package com.cashflow.database.repository;
 
 import com.cashflow.database.entity.CashFlowEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,4 +17,10 @@ public interface CashFlowRepository extends MongoRepository<CashFlowEntity, Stri
     List<CashFlowEntity> searchDatesType(LocalDate initialDate,
                                          LocalDate finalDate,
                                          String cashFlowType);
+
+    @Query("{$and: [{'date' : { $gte: ?0 } }, {'date' : {$lte: ?1 } }], 'type' : ?2 }")
+    Page<CashFlowEntity> searchDatesTypePageable(LocalDate initialDate,
+                                                 LocalDate finalDate,
+                                                 String cashFlowType,
+                                                 Pageable pageable);
 }

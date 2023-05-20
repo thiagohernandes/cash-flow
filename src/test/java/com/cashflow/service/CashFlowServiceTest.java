@@ -4,12 +4,16 @@ import com.cashflow.database.entity.CashBalanceEntity;
 import com.cashflow.database.entity.CashFlowEntity;
 import com.cashflow.database.repository.CashFlowRepository;
 import com.cashflow.domain.request.CashFlowRequest;
+import com.cashflow.domain.request.CashFlowSearchRequest;
 import com.cashflow.domain.response.CashFlowDailyCondensedResponse;
+import com.cashflow.domain.response.CashFlowReleaseResponse;
 import com.cashflow.domain.response.CashFlowResponse;
 import com.cashflow.exception.handler.HandlerValidationException;
 import com.cashflow.factory.CashFlowFactory;
 import com.cashflow.support.SupportTests;
 import com.cashflow.type.CashFlowType;
+import com.cashflow.type.SearchFieldType;
+import com.cashflow.type.SearchSortType;
 import com.cashflow.util.ExceptionUtil;
 import com.cashflow.util.FormatUtil;
 import com.cashflow.validator.CashFlowValidator;
@@ -19,6 +23,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,6 +35,7 @@ import java.util.Collections;
 
 import static com.mongodb.assertions.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -122,6 +132,61 @@ public class CashFlowServiceTest extends SupportTests {
 
         assertThrows(RuntimeException.class, () -> cashFlowService
             .dailyCondensed(initialDate.plusDays(4), finalDate));
+    }
+
+    @Test
+    void shouldGetFinancialReleasesTest() {
+        final CashFlowSearchRequest cashFlowSearchRequest = CashFlowSearchRequest.builder()
+            .sort(SearchSortType.DESC)
+            .size(10)
+            .page(0)
+            .type("CREDIT")
+            .initialDate(LocalDate.now())
+            .finalDate(LocalDate.now().plusDays(10))
+            .build();
+
+        final Page<CashFlowEntity> page = mock(Page.class);
+        final Pageable pageable = PageRequest.of(0, 10,
+            Sort.by(Sort.Direction.DESC, SearchFieldType.BY_DATE.getField()));
+
+        when(cashFlowRepository
+            .searchDatesTypePageable(cashFlowSearchRequest.getInitialDate(),
+                cashFlowSearchRequest.getFinalDate(),
+                cashFlowSearchRequest.getType(),
+                pageable))
+            .thenReturn(page);
+
+        Mono<CashFlowReleaseResponse> releaseResponseMono = cashFlowService
+            .financialReleases(cashFlowSearchRequest);
+
+        assertNotNull(releaseResponseMono);
+    }
+
+    @Test
+    void shouldGetFinancialReleasesEmptyTest() {
+        final CashFlowSearchRequest cashFlowSearchRequest = CashFlowSearchRequest.builder()
+            .sort(SearchSortType.DESC)
+            .size(10)
+            .page(0)
+            .type("CREDIT")
+            .initialDate(LocalDate.now())
+            .finalDate(LocalDate.now().plusDays(10))
+            .build();
+
+        final Pageable pageable = PageRequest.of(0, 10,
+            Sort.by(Sort.Direction.DESC, SearchFieldType.BY_DATE.getField()));
+
+        when(cashFlowRepository
+            .searchDatesTypePageable(cashFlowSearchRequest.getInitialDate(),
+                cashFlowSearchRequest.getFinalDate(),
+                cashFlowSearchRequest.getType(),
+                pageable))
+            .thenReturn(null);
+
+        Mono<CashFlowReleaseResponse> releaseResponseMono = cashFlowService
+            .financialReleases(cashFlowSearchRequest);
+
+        assertNotNull(releaseResponseMono);
     }
 
 }
