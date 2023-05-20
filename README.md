@@ -1,6 +1,9 @@
 # API cash-flow
 Merchant's Cash Flow
 
+## Project's Architecture
+![Screenshot](architecture.png)
+
 ### Goals
     - Control of financial entries and cash balance
 
@@ -48,6 +51,13 @@ Save an incoming (CREDIT) or outgoing (DEBIT) financial entry
 
 `Example: http://localhost:8088/cash-flow/save`
 
+Return financial releases
+
+`GET http://localhost:8088/cash-flow/financial-releases`
+
+`Example: http://localhost:8088/cash-flow/financial-releases?initialDate=2023-05-15&finalDate=2023-05-17&type=DEBIT&page=0&sortType=DESC&size=10`
+
+
 Body
 
 `{
@@ -58,7 +68,7 @@ Body
 
 ### Deploy Kubernetes (prod branch)
 
-PS: before `mvn clean install`, if started docker compose, remove the MongoDB's container to avoid ports conflit 
+PS: before `mvn clean install`, if started docker compose, remove the MongoDB's container to avoid ports conflit
 
 Do: `docker ps` and `docker rm -f <first letters container mongodb>`
 
