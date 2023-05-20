@@ -39,7 +39,7 @@ Running local:
 
 Postman: see postman's folder in project root (import and change IP Kubernetes's calls)
 
-Return of entries and exits in the period and updated balance
+### Return of entries and exits in the period and updated balance
 
 `GET http://localhost:8088/cash-flow/daily-condensed/{initialDate}/{finalDate}`
 
@@ -57,13 +57,21 @@ Important!
 }
 `
 
-Save an incoming (CREDIT) or outgoing (DEBIT) financial entry
+### Save an incoming (CREDIT) or outgoing (DEBIT) financial entry
 
 `POST http://localhost:8088/cash-flow/save`
 
 `Example: http://localhost:8088/cash-flow/save`
 
-Return financial releases
+Body
+
+`{
+"date": "2023-05-15",
+"type": "DEBIT",
+"value": 30
+}`
+
+### Return financial releases
 
 `GET http://localhost:8088/cash-flow/financial-releases`
 
@@ -93,14 +101,6 @@ Important!
 "totalPages": 2 // total of pages. In this case, pages: 0 and 1
 }
 `
-
-Body
-
-`{
-"date": "2023-05-15",
-"type": "DEBIT",
-"value": 30
-}`
 
 ### Deploy Kubernetes (prod branch)
 
@@ -135,6 +135,8 @@ After last command, do:
 `http://<ip-generated-local>:31000/cash-flow/daily-condensed/{initialDate}/{finalDate}`
 
 `http://<ip-generated-local>:31000/cash-flow/save`
+
+`http://<ip-generated-local>:31000/cash-flow/financial-releases`
 
 ### Kubernetes Cluster
 
