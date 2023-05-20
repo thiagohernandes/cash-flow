@@ -37,6 +37,11 @@ Running local:
 
 ### Calls
 
+IMPORTANT!
+
+Put the basic auth user as below:
+![Screenshot](basic-auth.png)
+
 Postman: see postman's folder in project root (import and change IP Kubernetes's calls)
 
 ### Return of entries and exits in the period and updated balance
