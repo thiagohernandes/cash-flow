@@ -48,6 +48,14 @@ public class CashFlowServiceTest extends SupportTests {
     private final CashFlowResponse response = generator.nextObject(CashFlowResponse.class);
     private final LocalDate initialDate = LocalDate.now();
     private final LocalDate finalDate = LocalDate.now().plusDays(3);
+    private final CashFlowSearchRequest cashFlowSearchRequest = CashFlowSearchRequest.builder()
+        .sort(SearchSortType.DESC)
+        .size(10)
+        .page(0)
+        .type("CREDIT")
+        .initialDate(LocalDate.now())
+        .finalDate(LocalDate.now().plusDays(10))
+        .build();
     @Mock
     private ExceptionUtil exceptionUtil;
     @Mock
@@ -136,15 +144,6 @@ public class CashFlowServiceTest extends SupportTests {
 
     @Test
     void shouldGetFinancialReleasesTest() {
-        final CashFlowSearchRequest cashFlowSearchRequest = CashFlowSearchRequest.builder()
-            .sort(SearchSortType.DESC)
-            .size(10)
-            .page(0)
-            .type("CREDIT")
-            .initialDate(LocalDate.now())
-            .finalDate(LocalDate.now().plusDays(10))
-            .build();
-
         final Page<CashFlowEntity> page = mock(Page.class);
         final Pageable pageable = PageRequest.of(0, 10,
             Sort.by(Sort.Direction.DESC, SearchFieldType.BY_DATE.getField()));
@@ -164,15 +163,6 @@ public class CashFlowServiceTest extends SupportTests {
 
     @Test
     void shouldGetFinancialReleasesEmptyTest() {
-        final CashFlowSearchRequest cashFlowSearchRequest = CashFlowSearchRequest.builder()
-            .sort(SearchSortType.DESC)
-            .size(10)
-            .page(0)
-            .type("CREDIT")
-            .initialDate(LocalDate.now())
-            .finalDate(LocalDate.now().plusDays(10))
-            .build();
-
         final Pageable pageable = PageRequest.of(0, 10,
             Sort.by(Sort.Direction.DESC, SearchFieldType.BY_DATE.getField()));
 
