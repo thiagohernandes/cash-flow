@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Collections;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +28,7 @@ public class CashBalanceServiceTest extends SupportTests {
 
     @Test
     void shouldUpdateBalanceEmptyTest() {
-         cashBalanceService.updateBalance(input, output);
+        cashBalanceService.updateBalance(input, output);
     }
 
     @Test
@@ -43,6 +44,8 @@ public class CashBalanceServiceTest extends SupportTests {
         when(cashBalanceRepository.findAll())
             .thenReturn(Collections.singletonList(entity));
 
-        cashBalanceService.verifyBalance();
+        final var balance = cashBalanceService.verifyBalance();
+
+        assertNotNull(balance);
     }
 }
