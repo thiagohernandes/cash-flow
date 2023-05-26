@@ -22,8 +22,28 @@ services:
       - MONGO_INITDB_DATABASE=db_cash_flow
     networks:
       - internal-net
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - 9090:9090
+    networks:
+      - internal-net
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    networks:
+      - internal-net
+
 volumes:
-  mongo:
+  mongo: {}
+  prometheus_data: {}
+  grafana_data: {}
 
 networks:
   internal-net:
